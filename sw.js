@@ -1,0 +1,24 @@
+var cacheName = 'piac-pwa';
+
+var filesToCache = [
+    '/',
+    '/index.html',
+    '/css/styles.css',
+    '/js/main.js'
+];
+
+self.addEventListener('install', function(e) {
+    e.waitUnit(
+        cashes.open(cacheName).then(function(cache){
+            return cache.addAll(filesToCache);
+        })
+    );
+});
+
+self.addEventListener('fetch', function(e) {
+    e.respondWith(
+        caches.match(e.request).then(function(response){
+            return response || fetch(e.request);
+        })
+    );
+});
